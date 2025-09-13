@@ -9,7 +9,10 @@ def main():
     load_dotenv()
 
     verbose = "--verbose" in sys.argv
-    args = [arg for arg in sys.argv[1:] if not arg.startswith("--")]
+    args = []
+    for arg in sys.argv[1:]:
+        if not arg.startswith("--"):
+            args.append(arg)
 
     if not args:
         print("AI Code Assistant")

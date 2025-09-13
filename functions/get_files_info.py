@@ -1,11 +1,9 @@
 import os
 
 
-def get_files_info(working_directory, directory=None):
+def get_files_info(working_directory, directory="."):
     abs_working_dir = os.path.abspath(working_directory)
-    target_dir = abs_working_dir
-    if directory:
-        target_dir = os.path.abspath(os.path.join(working_directory, directory))
+    target_dir = os.path.abspath(os.path.join(working_directory, directory))
     if not target_dir.startswith(abs_working_dir):
         return f'Error: Cannot list "{directory}" as it is outside the permitted working directory'
     if not os.path.isdir(target_dir):
@@ -23,25 +21,3 @@ def get_files_info(working_directory, directory=None):
         return "\n".join(files_info)
     except Exception as e:
         return f"Error listing files: {e}"
-
-MAX_CHARS = 10000
-
-def get_file_content(working_directory, file_path):
-    try:
-        working_directory = os.path.abspath(working_directory)
-        file_path = os.path.abspath(os.path.join(working_directory, file_path))
-
-        if not file_path.startswith(working_directory):
-            return f'Error: Cannot read "{file_path}" as it is outside the permitted working directory'
-
-        if not os.path.isfile(file_path):
-            return f'Error: File not found or is not a regular file: "{file_path}"'
-
-        with open(file_path, "r", encoding="utf-8") as f:
-            content = f.read(MAX_CHARS)
-            if f.read(1):  # If there's more content after reading MAX_CHARS
-                content += f'\n[...File "{file_path}" truncated at 10000 characters]'
-            return content
-
-    except Exception as e:
-        return f'Error: {str(e)}'
